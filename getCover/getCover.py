@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#WindowsÏÂĞèÒªÊ¹ÓÃgbk±àÂë
+#Windowsä¸‹éœ€è¦ä½¿ç”¨gbkç¼–ç 
 # -*- coding: gbk -*-
 # @author chxt<chxt6896@gmail.com>
 # @site   git@github.com:chxt6896/getCover.git
@@ -10,11 +10,11 @@ import eyeD3, re, os, sys, time, urllib
 urlread = lambda url: urllib.urlopen(url).read()
 
 class getAlbumCover:
-    '''´Ó¶¹°ê»ñÈ¡×¨¼­·âÃæÊı¾İ£¬²¢Ğ´Èë¶ÔÓ¦µÄ mp3 ÎÄ¼ş'''
+    '''ä»è±†ç“£è·å–ä¸“è¾‘å°é¢æ•°æ®ï¼Œå¹¶å†™å…¥å¯¹åº”çš„ mp3 æ–‡ä»¶'''
 
     _eyeD3 = None
 
-    # ¶¹°êËÑË÷ÒÔ¼°×¨¼­·âÃæÏà¹ØµÄ API ºÍ¸ñÊ½
+    # è±†ç“£æœç´¢ä»¥åŠä¸“è¾‘å°é¢ç›¸å…³çš„ API å’Œæ ¼å¼
     _doubanSearchApi    = 'http://api.douban.com/music/subjects?q={0}&max-results=1'
     _doubanCoverPattern3 = 'http://img3.douban.com/spic/s(\d+).jpg'
     _doubanCoverPattern1 = 'http://img1.douban.com/spic/s(\d+).jpg'
@@ -24,9 +24,9 @@ class getAlbumCover:
     #view-source:http://api.douban.com/music/subjects?q=%E5%B4%87%E6%8B%9C&max-results=1
     
     
-    artist = '' # Ñİ³ªÕß
-    album  = '' # ×¨¼­Ãû³Æ
-    title  = '' # ¸èÇú±êÌâ
+    artist = '' # æ¼”å”±è€…
+    album  = '' # ä¸“è¾‘åç§°
+    title  = '' # æ­Œæ›²æ ‡é¢˜
 
     def __init__(self, mp3):
         print 'mp3-->',mp3
@@ -36,10 +36,10 @@ class getAlbumCover:
             self._eyeD3.link(mp3)
             self.getFileInfo()
         except:
-            print '¶ÁÈ¡ÎÄ¼ş´íÎó'
+            print 'è¯»å–æ–‡ä»¶é”™è¯¯'
 
     def updateCover(self, cover_file):
-        '''¸üĞÂ×¨¼­·âÃæÖÁÎÄ¼ş'''
+        '''æ›´æ–°ä¸“è¾‘å°é¢è‡³æ–‡ä»¶'''
         try:
             self._eyeD3.removeImages()
             # cover exists or readable?
@@ -49,22 +49,22 @@ class getAlbumCover:
             self._eyeD3.update()
             return True
         except:
-            print 'ĞŞ¸ÄÎÄ¼ş´íÎó'
+            print 'ä¿®æ”¹æ–‡ä»¶é”™è¯¯'
             return False
 
     def getFileInfo(self):
-        ''' »ñÈ¡×¨¼­ĞÅÏ¢ '''
+        ''' è·å–ä¸“è¾‘ä¿¡æ¯ '''
         self.artist = self._eyeD3.getArtist().encode('gbk')
         self.album  = self._eyeD3.getAlbum().encode('gbk')
         self.title  = self._eyeD3.getTitle().encode('gbk')
 
     def getCoverAddrFromDouban(self, keywords = ''):
-        ''' ´Ó¶¹°ê»ñÈ¡×¨¼­·âÃæµÄ URL '''
+        ''' ä»è±†ç“£è·å–ä¸“è¾‘å°é¢çš„ URL '''
         if not len(keywords):
             keywords = self.artist + ' ' + (self.album or self.title)
             print '[keywords]',keywords
 
-        #ĞèÒªÏÈ½«keywords½âÂë³ÉgbkÔÙ±àÂë³Éutf-8
+        #éœ€è¦å…ˆå°†keywordsè§£ç æˆgbkå†ç¼–ç æˆutf-8
         request = self._doubanSearchApi.format(urllib.quote(keywords.decode('gbk').encode('utf-8')))
         #print urllib.unquote('%E6%A2%81%E9%9D%99%E8%8C%B9%20%E5%B4%87%E6%8B%9C').decode('utf-8').encode('gbk')
         print '[request]',request
@@ -75,7 +75,7 @@ class getAlbumCover:
         if not len(result):
             return False
 
-        #Èç¹û_doubanCoverPattern3Æ¥Åä²»³É¹¦£¬ÔòÆ¥Åä_doubanCoverPattern1
+        #å¦‚æœ_doubanCoverPattern3åŒ¹é…ä¸æˆåŠŸï¼Œåˆ™åŒ¹é…_doubanCoverPattern1
         match = re.search(self._doubanCoverPattern3, result, re.IGNORECASE)
         if match:
             pass
@@ -90,14 +90,14 @@ class getAlbumCover:
 
 if __name__ == "__main__":
     print sys.argv[1]
-    #±éÀú½«Òª²éÑ¯µÄÄ¿Â¼£¬ËÑË÷ËùÓĞµÄmp3ÎÄ¼ş
+    #éå†å°†è¦æŸ¥è¯¢çš„ç›®å½•ï¼Œæœç´¢æ‰€æœ‰çš„mp3æ–‡ä»¶
     for i in os.listdir(sys.argv[1]):
     #for i in sys.argv:
         if re.search('.mp3$', i):
-            print 'ÕıÔÚ´¦Àí:', i,
+            print 'æ­£åœ¨å¤„ç†:', i,
             handler = getAlbumCover(i)
             if handler.artist and (handler.album or handler.title):
-                print '[ÄÚÈİ]', handler.artist, handler.title,handler.album
+                print '[å†…å®¹]', handler.artist, handler.title,handler.album
                 cover_addr = handler.getCoverAddrFromDouban()
                 print '[cover_addr]',cover_addr
                 if cover_addr:
@@ -108,13 +108,13 @@ if __name__ == "__main__":
                     f.write(urlread(cover_addr))
                     f.close()
                     if handler.updateCover(cover_file):
-                        print '[Íê³É]'
+                        print '[å®Œæˆ]'
                     else:
-                        print '[Ê§°Ü1]'
+                        print '[å¤±è´¥1]'
                     os.remove(cover_file)
                 else:
-                    print '[Ê§°Ü2]'
+                    print '[å¤±è´¥2]'
             handler = None
-            time.sleep(3) # ¼ä¸ô 3s £¬·ÀÖ¹±»¶¹°ê Block
+            time.sleep(3) # é—´éš” 3s ï¼Œé˜²æ­¢è¢«è±†ç“£ Block
 
 # vim: set et sw=4 ts=4 sts=4 fdm=marker ff=unix fenc=utf8 nobomb ft=python:
